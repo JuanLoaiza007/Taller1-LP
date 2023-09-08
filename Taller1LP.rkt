@@ -28,9 +28,15 @@ parentesis comparado con su estado original en L.
 
 (define down
   (lambda (l)
-    ???
+    (if (null? l)
+        (list l)
+        (if (null? (cdr l))
+            (list l)
+            (cons (list (car l)) (down (cdr l)))
+        )
     )
   )
+)
 
 #| PUNTO 5
 Elabore una funcion llamada list-index que
