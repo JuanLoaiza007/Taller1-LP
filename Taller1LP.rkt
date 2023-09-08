@@ -63,15 +63,5 @@ L' que intercambia cada E1 por E2, y cada E2 por E1 en L.
       ((equal? E2 (car L)) (cons E1 (swapper E1 E2 (cdr L))))
       (else (cons (car L) (swapper E1 E2 (cdr L)))))))
 
-#| 9. 
-inversions
-Proposito:
-()--> L' : Procedimiento que recibe tres argumentos:
-un elemento E1, un elemento E2 y una lista L. Cuyo retorno es una lista
-L' que intercambia cada E1 por E2, y cada E2 por E1 en L.
-
-<lista> := ()
-<lista> := (<valor-de-scheme> <lista>)
-|#
 
 
