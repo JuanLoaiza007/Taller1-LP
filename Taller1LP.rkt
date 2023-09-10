@@ -40,11 +40,11 @@
 )
 
 ;; Pruebas
-(down '(4 5 6)) ;((4) (5) (6))
-(down '(f l a n d e r s)) ; ((f) (l) (a) (n) (d) (e) (r) (s))
-(down '(algo (bien) ((pro)))) ; ((algo) ((bien)) (((pro))))
-(down '((hola) (mund()))) ; (((hola)) ((mund ())))
-(down '((h) 0 ((la)) mund (1) llo)) ; (((h)) (0) (((la))) (mund) ((1)) (llo))
+(down '(4 5 6))
+(down '(f l a n d e r s))
+(down '(algo (bien) ((pro))))
+(down '((hola) (mund())))
+(down '((h) 0 ((la)) mund (1) llo))
 
 ;;  5.
 ;; list-index
@@ -76,7 +76,17 @@
   )
 )
 
-;; Pruebas (en Desarrollo)
+;; Pruebas
+(list-index number? '(no tengo numeros))
+(list-index number? '(tengo numero en la 4 mira))
+(list-index symbol? '(1 2 3))
+(list-index symbol? '(0 1 2 tres 4 5))
+(list-index null? '())
+(list-index null? '(null?))
+(list-index null? '(null ... hey racket, s 0 y una lista vacia? ))
+(list-index boolean? '(0))
+(list-index boolean? '(hey racket, tengo booleanos?))
+(list-index boolean? '(yo si mira #t jaja))
 
 
 
