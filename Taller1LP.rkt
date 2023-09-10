@@ -39,7 +39,12 @@
   )
 )
 
-;; Pruebas (en Desarrollo)
+;; Pruebas
+(down '(4 5 6)) ;((4) (5) (6))
+(down '(f l a n d e r s)) ; ((f) (l) (a) (n) (d) (e) (r) (s))
+(down '(algo (bien) ((pro)))) ; ((algo) ((bien)) (((pro))))
+(down '((hola) (mund()))) ; (((hola)) ((mund ())))
+(down '((h) 0 ((la)) mund (1) llo)) ; (((h)) (0) (((la))) (mund) ((1)) (llo))
 
 ;;  5.
 ;; list-index
