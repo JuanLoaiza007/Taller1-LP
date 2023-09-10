@@ -18,12 +18,16 @@
 ;:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
 ;; DESARROLLO
 
-#| PUNTO 2
-2) Elabore una funcion llamada down que
-recibe como argumento una lista L,
-y lo que debe realizar dicha funcion es
-retornar una lista con cada elemento de L asociado a un nivel más de
-parentesis comparado con su estado original en L.
+#| 2.
+down
+Proposito:
+(L) --> L' : Funcion que recibe un argumento:
+Recibe una lista L y devuelve una nueva lista L', 
+donde cada elemento de L está asociado a un nivel más de paréntesis 
+comparado con su versión original en L.
+
+<lista> := ()
+<lista> := (<valor-de-scheme> <lista>)
 |#
 
 (define down
@@ -38,19 +42,42 @@ parentesis comparado con su estado original en L.
   )
 )
 
-#| PUNTO 5
-Elabore una funcion llamada list-index que
-debe recibir dos argumentos: un predicado P y una lista L.
-La funcion retorna (desde una posicion inicial 0) el primer
-elemento de la lista que satisface el predicado L.
+;Pruebas (en Desarrollo)
 
-Si llega a suceder que ningun elemento satisface el predicado recibido,
-la funcion debe retornar #f. 
+#| 5.
+list-index
+Proposito:
+(P, L) --> Resultado: Función que recibe dos argumentos: 
+Un predicado P y una lista L, la función retorna (desde una posición inicial 0) 
+el primer elemento de la lista que cumple con el predicado P.
+Si no encuentra ningún elemento que cumpla retorna #f.
+
+<lista> := ()
+<lista> := (<valor-de-scheme> <lista>)
 |#
 
 (define list-index
-  (lambda ()
-    ???
-    )
+  (lambda (P L)
+
+    (define list-index-auxiliar
+      (lambda (indice predicado lista)
+        (if (null? lista)
+          #f
+          (if (predicado (car lista))
+              indice
+              (list-index-auxiliar (+ indice 1) predicado (cdr lista))
+          )
+        )
+       )
+     )
+
+    (list-index-auxiliar 0 P L)
   )
+)
+
+;Pruebas (en Desarrollo)
+
+
+
+
 
