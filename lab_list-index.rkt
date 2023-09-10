@@ -41,15 +41,34 @@ la funcion debe retornar #f.
 (pred1 '())
 #f
 
-... 
+;Programa que calcula la longitud de una lista - Clase 3
+;list-length : List -> Int
+;usage: (list-length l) = the length of l
+; Con esta se cuenta la longitud, si se agrega un punto de parada (P (car L)) entonces cuenta hasta el indice
+; del elemento que coincide
+(define list-length
+  (lambda (lst)
+   (if (null? lst)
+   0
+   ; Aqui va mi condicion de parada nueva
+   (+ 1 (list-length (cdr lst)))))) ; Esto se puede cambiar por recursión iterativa pa no volarme la cabeza
 |#
 
 (define list-index
-  (lambda (P L )
-    (if (null? L)
-        #f
-        (if (P (car L))
-            0
-            'a_ver_al_cine))
-    )
+  (lambda (P L)
+
+    (define list-index-auxiliar
+      (lambda (indice predicado lista)
+        (if (null? lista)
+          #f ; No esta, simplemente F
+          (if (predicado (car lista))
+              indice ; Lo encontreeeeeeeeeeeeeeeeeeeee, toma tu indice mi papacho
+              (list-index-auxiliar (+ indice 1) predicado (cdr lista)) ; seguir buscando en la cola y cuenta un indice mas
+          )
+        )
+       )
+     )
+
+    (list-index-auxiliar 0 P L)
   )
+)
