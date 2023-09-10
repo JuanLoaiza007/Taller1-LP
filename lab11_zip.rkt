@@ -26,14 +26,32 @@ L2.
 ; uso: (zip + l1 l11)
 
 #| Teoria
-DUDA: ¿Hay que agregar una restricción por si las listas no
-son del mismo tamaño?
+;; DUDA: ¿Hay que agregar una restricción por si las listas no
+;; son del mismo tamaño?
 
-...
+; Hay que usar lo mismo que antes pero diferente
+
+> (+ 1 2)
+3
+
+> (cons (+ 1 2) empty)
+(3)
+
+> (cons (+ 1 2) (cons (+ 1 4) empty))
+(3 5)
+
+> (cons (+ 1 2) (cons (+ 1 4) (cons (+ 2 6) empty)))
+(3 5 8) 
 |#
+
+; v1, me estoy volviendo el durisimo de Racket siuuuuuuuuuuuuuuu
 
 (define zip
   (lambda (F L1 L2)
-    'a_ver_al_cine
+    (if (null? L1)
+        empty
+        (if (number? L1)
+        (F L1 L2)
+        (cons (zip F (car L1) (car L2)) (zip F (cdr L1) (cdr L2)))))
   )
 )
