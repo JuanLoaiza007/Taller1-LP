@@ -34,17 +34,28 @@ LAS LISTAS DEBEN SER DE IGUAL TAMAÑO
 
 (define l3 (list 1 2 3))
 (define l33 (list 3 9 12))
-; uso: (mapping (funar1 l1 l11))
+; uso: (mapping funar1 l1 l11)
 
 #| Teoria
 DUDA: ¿Hay que agregar una restricción por si las listas no
 son del mismo tamaño?
 
+> (= (* (car l1) 2) (car l11))
+#t
 ...
 |#
 
 (define mapping
   (lambda (F L1 L2)
-    'a_ver_al_cine
+    (cond
+      ((null? L1)
+       empty)
+      ((number? L1)
+       (if (= (F L1) L2)
+        (list L1 L2)
+        empty))
+      (else
+       (cons (mapping F (car L1) (car L2)) (mapping F (cdr L1) (cdr L2))))
+    )
   )
 )
