@@ -19,5 +19,22 @@
 ;; DESARROLLO
 
 
+;;#|1.
+;; invert:
+;; Proposito:
+;; L -> L' : Procedimiento que invierte los pares
+;; de una lista L.
+;;
+;;<lista> := ()
+;; := (<valor-de-scheme> <lista>)
 
 
+
+(define invert
+  ( lambda (l)
+     (if (null? l)
+         '()
+         (cons (list (cadr (car l)) (car (car l))) (invert (cdr l))))
+      )
+
+   )
