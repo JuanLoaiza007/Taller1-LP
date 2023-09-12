@@ -38,3 +38,26 @@
       )
 
    )
+
+
+;;#|4.
+;; filter-in:
+;; Proposito:
+;; P x L -> P' x L' : Procedimiento que invierte los pares
+;; de una lista L.
+;;
+;;<lista> := ()
+;; := (<valor-de-scheme> <lista>)
+
+
+
+(define filter-in
+  (lambda (P L)
+    (cond
+      [(null? L) '()]
+      [(P (car L)) (cons (car L) (filter-in P (cdr L)))]
+      (else (filter-in P (cdr L))))))
+
+
+
+
