@@ -87,3 +87,27 @@
       (cartesian-product-aux L1 L2 '()))
     )
   )
+
+;;|10
+;; up:
+;; Proposito:
+;; L -> L' : Procedimiento que hace producto cartesiano
+;; entre los datos de dos listas.
+;;
+;;<lista> := ()
+;; := (<valor-de-scheme> <lista>)
+
+;;  (up '((1 2) (3 4)))
+
+
+(define up
+  (lambda (L)
+    (define (up-aux l1 l2)
+      (cond
+        ((null? l1) l2)
+        (else (cons (car l1) (up-aux (cdr l1) l2)))))
+    
+    (cond
+      ((null? L) '())
+      ((list? (car L)) (up-aux (up (car L)) (up (cdr L))))
+      (else (cons (car L) (up (cdr L)))))))
