@@ -39,10 +39,25 @@ de realizar la multiplicación matriz por vector.
 
 (define prod-scalar-matriz
   (lambda (mat vec)
-    'a_ver_al_cine
+    
+    (define prodVec
+      (lambda (vector1 vector2)
+        (if (null? (cdr vector2))
+            (list (* (car vector1) (car vector2)))
+            (cons (* (car vector1) (car vector2)) (prodVec (cdr vector1) (cdr vector2)))
+            )
+        )
+      )
+
+    (if (null? (cdr mat))
+        (cons (prodVec (car mat) vec) empty)
+        (cons (prodVec (car mat) vec) (prod-scalar-matriz (cdr mat) vec))
+     )
+
   )
 )
 
+#| 
 (define getFila
   (lambda (numero matriz)
     (if (= numero 1)
@@ -63,9 +78,19 @@ de realizar la multiplicación matriz por vector.
 
 (define prodVec
   (lambda (vector1 vector2)
-    (if (null? (cdr vector1))
+    (if (null? (cdr vector2))
         (list (* (car vector1) (car vector2)))
         (cons (* (car vector1) (car vector2)) (prodVec (cdr vector1) (cdr vector2)))
      )
     )
   )
+
+(define prodMat1
+  (lambda (matriz vector)
+    (if (null? (cdr matriz))
+        (cons (prodVec (car matriz) vector) empty)
+        (cons (prodVec (car matriz) vector) (prodMat1 (cdr matriz) vector))
+     )
+    )
+  )
+|#
