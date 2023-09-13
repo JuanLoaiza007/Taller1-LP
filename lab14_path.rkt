@@ -11,12 +11,19 @@ debe retornar una lista con la ruta a tomar (iniciando desde el nodo raíz del
 Si el número n es encontrado en el nodo raíz, el procedimiento debe retornar
 una lista vacía.
 
-> (path 17 ’(14 (7 () (12 () ()))
+> (path 17 '(14 (7 () (12 () ()))
   (26 (20 (17 () ())
           ())
       (31 () ()))))
 (right left left)
 
+         14
+       /    \
+      7      26
+       \    /  \
+       12  20   31
+          /\
+        17
 |#
 
 ; Casos prueba del enunciado
@@ -25,8 +32,30 @@ una lista vacía.
 #| Teoria (en Desarrollo...)
 |#
 
+(define unArbol '(14
+                  (7 () (12 () ()) )
+                  (26  (20 (17 () ()) ())  (31 () ()) )
+                 )
+)
+
 (define path
   (lambda (n BST)
-    'a_ver_al_cine
+    
+    (define left
+      (lambda (tree)
+        car tree
+       )
+      )
+    
+    (define right
+      (lambda (tree)
+        cadr tree
+       )
+      )
+    
+    (cond
+      ((= n (car BST)) '())
+      (else 'a_ver_al_cine)
+     )
   )
 )
