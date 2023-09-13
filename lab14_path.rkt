@@ -22,14 +22,15 @@ una lista vacía.
       7      26
        \    /  \
        12  20   31
-          /\
-        17
+           /\
+         17
 |#
 
 ; Casos prueba del enunciado
 ; Ni idea de como formular esto aún (en Desarrollo...)
 
 #| Teoria (en Desarrollo...)
+; Un arbol binario tiene dos ramas y se cumple que valorRamaIzquierda < valorRamaDerecha
 |#
 
 (define unArbol '(14
@@ -40,22 +41,37 @@ una lista vacía.
 
 (define path
   (lambda (n BST)
-    
-    (define left
+
+    (define valor-nodo
       (lambda (tree)
-        car tree
+        (car tree)
        )
       )
     
-    (define right
+    (define valor-izquierdo
       (lambda (tree)
-        cadr tree
-       )
+        (car (cadr tree))
       )
+    )
     
-    (cond
-      ((= n (car BST)) '())
-      (else 'a_ver_al_cine)
-     )
+    (define valor-derecho
+      (lambda (tree)
+        (car (caddr tree))
+      )
+    )
+
+    (define rama-izquierda
+      (lambda (tree)
+        (car (cdr tree))
+      )
+    )
+
+     (define rama-derecha
+      (lambda (tree)
+        (cdr (cdr tree))
+      )
+    )
+
+    'aqui_va_el_codigo
   )
 )
