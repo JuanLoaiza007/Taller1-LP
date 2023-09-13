@@ -60,4 +60,30 @@
 
 
 
+;;|6
+;; cartesian-product:
+;; Proposito:
+;; L1 x L2 -> L1' x L2' : Procedimiento que hace producto cartesiano
+;; entre los datos de dos listas.
+;;
+;;<lista> := ()
+;; := (<valor-de-scheme> <lista>)
 
+;; (cartesian-product '(a b c) '(x y))
+
+(define cartesian-product
+  (lambda (L1 L2)
+    (letrec ((cartesian-product-aux
+              (lambda (l1 l2 rest)
+                (cond
+                  ((null? l1) rest)
+                  ((null? l2) (cartesian-product-aux (cdr l1) L2 rest))
+                  (else
+                   (cons (list (car l1) (car l2))(cartesian-product-aux l1 (cdr l2) rest))
+                   )
+                  )
+                )
+              ))
+      (cartesian-product-aux L1 L2 '()))
+    )
+  )
