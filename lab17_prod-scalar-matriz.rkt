@@ -16,10 +16,25 @@ de realizar la multiplicación matriz por vector.
 
 |#
 
+(define mat0 '((1 1)))
+(define vec0 '(1 2 3 4))
+
 ; Casos prueba del enunciado
-; Ni idea de como formular esto aún (en Desarrollo...)
+(define mat1 '((1 1) (2 2)))
+#| 1 1
+   2 2
+|#
+(define mat2 '((1 1) (2 2) (3 3)))
+#| 1 1
+   2 2
+   3 3
+|#
+
+(define vec1 '(2 3))
 
 #| Teoria (en Desarrollo...)
+> (* (car (car mat1)) (car vec1))
+2
 |#
 
 (define prod-scalar-matriz
@@ -27,3 +42,30 @@ de realizar la multiplicación matriz por vector.
     'a_ver_al_cine
   )
 )
+
+(define getFila
+  (lambda (numero matriz)
+    (if (= numero 1)
+        (car matriz)
+        (getFila (- numero 1) (cdr matriz))
+     )
+   )
+ )
+
+(define getFilas
+  (lambda (matriz)
+    (if (null? (cdr matriz))
+        (list (car matriz))
+        (cons (car matriz) (getFilas (cdr matriz)))
+     )
+    )
+  )
+
+(define prodVec
+  (lambda (vector1 vector2)
+    (if (null? (cdr vector1))
+        (list (* (car vector1) (car vector2)))
+        (cons (* (car vector1) (car vector2)) (prodVec (cdr vector1) (cdr vector2)))
+     )
+    )
+  )
