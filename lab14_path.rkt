@@ -39,39 +39,75 @@ una lista vacía.
                  )
 )
 
-(define path
-  (lambda (n BST)
-
-    (define valor-nodo
+(define valor-nodo
       (lambda (tree)
-        (car tree)
-       )
+        (if (null? (car tree))
+            '()
+            (car tree)
+        )
+        )
       )
     
     (define valor-izquierdo
       (lambda (tree)
-        (car (cadr tree))
+        (if (null? (cadr tree))
+            '()
+            (car (cadr tree)))
+        )
       )
-    )
-    
+
     (define valor-derecho
       (lambda (tree)
-        (car (caddr tree))
+        (if (null? (caddr tree))
+            '()
+            (car (caddr tree)))
+        )
       )
-    )
+
 
     (define rama-izquierda
       (lambda (tree)
         (car (cdr tree))
+        )
       )
-    )
 
-     (define rama-derecha
+    (define rama-derecha
       (lambda (tree)
-        (cdr (cdr tree))
+        (car (cdr (cdr tree)))
+        )
       )
+
+
+
+; AVISO DE INCOMPLETA
+; Obtiene TODOS los caminos y su resultado con mucho ruido visual
+(define path
+  (lambda (n BST)
+    
+    (define esNodo?
+      (lambda (objeto)
+        (if (or (boolean? objeto)
+                (eqv? 'left objeto)
+                (eqv? 'right objeto)
+                )
+            #t
+            #f
+            )
+        )
+      )
+    
+    (cond
+          ((null? BST) (list #f))
+          ((= n (valor-nodo BST)) (list #t))
+          (else
+           (list
+            (cons 'left (path n (rama-izquierda BST)))
+            (cons 'right (path n (rama-derecha BST)))))))
+
     )
 
-    'aqui_va_el_codigo
-  )
-)
+(define lista (path 17 unArbol))
+(define lista1 '(right (left #f) (right #f)))
+(define lista0 '(a (b (#f) (#f)) (c (#f) (#f))))
+
+
