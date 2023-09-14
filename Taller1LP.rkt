@@ -71,8 +71,27 @@ esta realiza el conteo de las veces que un número ai > aj, siempre que i < j
 (es decir que haya un número mayor a otro que esta ubicado antes del segundo
 número en la lista)
 
-<lista> := ()
-<lista> := (<valor-de-scheme> <lista>)
+--Funciones auxiliares:
+count-inversions
+Propósito:
+(L) --> Int: Procedimiento que calcula el número de inversiones en la lista L.
+En esta se realiza el llamado a la función count, que toma la lista L y un acumulador.
+
+count
+Proposito:
+(L, accumulator) --> Int: Procedimiento que toma la lista L y el acumulador de inversiones,
+se encarga de recorrer la lista L, guardando el elemento actual en 'current' e invocando
+a count-greater para contar cuantos elementos son mayores a 'current', y el conteo se
+guarda en acumulador hasta recorrer toda L.
+
+count-greater
+Proposito:
+(x, L) --> Int:Procedimiento que toma un valor x, que es el valor con el que se compara y la
+lista L en la que se realiza la busqueda, esta función compara x con cada elemento de L,
+y cada que x es mayor agraga 1 al acumulador.
+
+<lista-numeros> := ()
+<lista-numeros> := (<int> <lista-numeros>)
 |#
 
 (define (inversions L)
@@ -98,8 +117,19 @@ número en la lista)
 (inversions '(1 2 3 4))  
 (inversions '(3 2 1))     
 
-#| 12. filter-acum
+#| 12.
+filter-acum
+(a b F acum filter) --> Int: Procedimiento que recibe dos números a y b, una función
+binaria F, un valor inicial acum y una función unitaria filter, esta aplica la función
+F a los enteros que estan en el intervalo [a, b] y que a su vez cumplen con la función
+filter, luego esto lo retorna acumulandolo en acum, que actua como un valor inicial.
 
+--Funciones auxiliares
+iterator
+(i, accumulator) --> : Procedimiento auxiliar que realiza la iteración y el calculo
+acumulativo en el rango de 'a' a 'b', aplicando 'filter' a cada elemento del rango
+y a los que pasen filtro aplicarles 'F' ademas de acumular este resultado y retornarlo
+al final.
 
 |#
 
@@ -113,12 +143,29 @@ número en la lista)
        (iterator (+ i 1) accumulator))))
   (iterator a acum))
 
+
 ; Ejemplos de uso
 (filter-acum 1 10 + 0 odd?)  ; Debería imprimir 25
 (filter-acum 1 10 + 0 even?) ; Debería imprimir 30
 
 #|15.
+count-odd-and-even
+Proposito:
+(arbol) --> L: Procedimiento que toma un arbol binario como entrada y retorna
+una lista con el número de nodos pares e impares respectivamente del arbol,
+esta realiza un llamado a la función auxiliar que va recorriendo cada nodo del arbol.
 
+--Funciones auxiliares
+count-odd-and-even-par
+Proposito:
+(subarbol) --> L: Porcedimiento que recibe un subarbol de arbol original, esta es la que
+analiza cada nodo del arbol, descomponiendo el arbol en cada componente (valor y subarboles
+izquierdo y derecho), para llamar recursivamente a si misma en cada subarbol, al hacer esto lleva
+el conteo de nodos tanto pares como impares, al finalizar de recorrer el arbol se hace el conteo
+y se retorna el número de nodos pares e iompares en una lista.
+
+<arbol-binario> := (arbol-vacıo) empty
+                := (nodo) <int> <arbol-binario> <arbol-binario>
 
 |#
 (define (count-odd-and-even arbol)
@@ -151,8 +198,33 @@ número en la lista)
 (count-odd-and-even arbol-ejemplo)
 
 #|18.
+pascal
+Proposito:
+(N) --> L: Procedimiento que recibe un entero positivo N y retorna la fila N correspondiente
+al triangulo de Pascal, inicialmente se analiiza N, cuando se entrega un entero menor a uno
+se retorna una lista vacia, cuando no, se invoca a la funcion auxiliar 'construct-row'.
 
+--Funciones auxiliares
+construct-row
+Proposito:
+(row) --> L: Este procedimiento contruye la fila N del triangulo de pascal, haciendo un llamado
+a otra función auxiliar nombrada 'construct-row-aux'
 
+construct-row-aux
+Proposito:
+(col) --> L: Este procedimiento contruye cada elemento correspondiente a la fila N del triangulo
+de Pascal, lo hace columna por columna, inciando desde la columna 0, luego almacena estos
+números en la lista L.
+
+calculate-element
+Proposito:
+(row col) --> Int: Procedimiento que calcula el valor de un elemento especifico en el triangulo
+de Pascal, para esto verifica si el elemento esta en los extremos del triangulo (donde siempre
+el valor es 1), o en la parte interna, para este caso suma los valores de los elementos en las
+filas anteriores del triangulo para calcular el valor de cada elemento especifico.
+
+<lista-numeros> := ()
+<lista-numeros> := (<int> <lista-numeros>)
 |#
 
 
@@ -164,13 +236,13 @@ número en la lista)
                (calculate-element (- row 1) col)))))
   
   (define (construct-row row)
-    (define (construct-row-helper col)
+    (define (construct-row-aux col)
       (if (= col row)
           (list (calculate-element row col))
-          (cons (calculate-element row col) (construct-row-helper (+ col 1)))))
-    (construct-row-helper 0))
+          (cons (calculate-element row col) (construct-row-aux (+ col 1)))))
+    (construct-row-aux 0))
   
-  (if (< N 0)
+  (if (< N 1)
       '()
       (construct-row (- N 1))))
 
