@@ -39,10 +39,11 @@ L' que intercambia en la posición n el elemento x.
 
 
 ;Pruebas
-(list-set '() 1 3)
-(list-set '(a b c d) 1 'a)
-(list-set '(a 2 4 g) 1 '(1 2))
-(list-set '(a b c d) 3 '(1 5 10))
+(list-set '() 1 3) ; retorna ()
+(list-set '(5 8 9 0 1) 0 3) ; retorna (3 8 9 0 1)
+(list-set '(a b c d) 1 'a) ; retorna (a a c d)
+(list-set '(a 2 4 g) 1 '(1 2)) ; retorna (a (1 2) 4 g)
+(list-set '(a b c d) 3 '(1 5 10)) ; retorna (a b c (1 5 10))
 
 #| 6. 
 swapper
@@ -62,6 +63,13 @@ L' que intercambia cada E1 por E2, y cada E2 por E1 en L.
       ((equal? E1 (car L)) (cons E2 (swapper E1 E2 (cdr L))))
       ((equal? E2 (car L)) (cons E1 (swapper E1 E2 (cdr L))))
       (else (cons (car L) (swapper E1 E2 (cdr L)))))))
+
+;Pruebas
+(swapper 'a 'b '()) ; retorna ()
+(swapper 'a 'b '(a b c d e)) ; retorna (b a c d e)
+(swapper '3 '6 '(1 2 3 4 5 6 7 8)) ; retorna (1 2 6 4 5 3 7 8)
+(swapper 'ab 'ba '(a2 ab ba b2 aa bb)) ; retorna (a2 ba ab b2 aa bb)
+(swapper 'x 'y '(x y y x x x y y y y x h x xy yx xx y yx x)) ; retorna (y x x y y y x x x x y h y xy yx xx x yx y)
 
 #| 9.
 inversions
@@ -113,9 +121,11 @@ y cada que x es mayor agraga 1 al acumulador.
 
   (count-inversions L))
 
-(inversions '(2 3 8 6 1)) 
-(inversions '(1 2 3 4))  
-(inversions '(3 2 1))     
+(inversions '(1)) ; retorna 0
+(inversions '(2 3 8 6 1)) ; retorna 5
+(inversions '(1 2 3 4))  ; retorna 0
+(inversions '(3 2 1)) ; retorna 3
+(inversions '(1 3 2 4 3 5 4 6 5)) ; retorna 4
 
 #| 12.
 filter-acum
@@ -130,23 +140,26 @@ iterator
 acumulativo en el rango de 'a' a 'b', aplicando 'filter' a cada elemento del rango
 y a los que pasen filtro aplicarles 'F' ademas de acumular este resultado y retornarlo
 al final.
-
 |#
 
-(define (filter-acum a b F acum filter)
-  (define (iterator i accumulator)
-    (cond
-      ((> i b) accumulator)
-      ((filter i)
-       (iterator (+ i 1) (F accumulator i)))
-      (else
-       (iterator (+ i 1) accumulator))))
-  (iterator a acum))
-
+(define filter-acum
+  (lambda (a b F acum filter)
+    (define iterator
+      (lambda (i accumulator) ; Agrega paréntesis aquí
+        (cond
+          ((> i b) accumulator)
+          ((filter i)
+           (iterator (+ i 1) (F accumulator i)))
+          (else
+           (iterator (+ i 1) accumulator)))))
+    (iterator a acum)))
 
 ; Ejemplos de uso
 (filter-acum 1 10 + 0 odd?)  ; Debería imprimir 25
 (filter-acum 1 10 + 0 even?) ; Debería imprimir 30
+(filter-acum -5 5 + 0 positive?) ; Debería imprimir 15
+(filter-acum 1 10 * 1 odd?) ; Debería imprimir 945
+(filter-acum 1 10 * 1 even?) ; Debería imprimir 3480
 
 #|15.
 count-odd-and-even
@@ -168,33 +181,46 @@ y se retorna el número de nodos pares e iompares en una lista.
                 := (nodo) <int> <arbol-binario> <arbol-binario>
 
 |#
-(define (count-odd-and-even arbol)
-  (define (count-odd-and-even-aux subarbol)
-    (cond
-      ((null? subarbol) '(0 0))
-      ((pair? subarbol)
-       (let* ((nodo (car subarbol))
-              (subarbol-izq (cadr subarbol))
-              (subarbol-der (caddr subarbol))
-              (conteo-izq (count-odd-and-even-aux subarbol-izq))
-              (conteo-der (count-odd-and-even-aux subarbol-der))
-              (conteo-izq-par (car conteo-izq))
-              (conteo-izq-impar (cadr conteo-izq))
-              (conteo-der-par (car conteo-der))
-              (conteo-der-impar (cadr conteo-der)))
-         (if (even? nodo)
-             (list (+ 1 conteo-izq-par conteo-der-par) (+ conteo-izq-impar conteo-der-impar))
-             (list (+ conteo-izq-par conteo-der-par) (+ 1 conteo-izq-impar conteo-der-impar)))))
-      ((number? subarbol)
-       (if (even? subarbol)
-           '(1 0)
-           '(0 1)))
-      (else '(0 0))))
-  (count-odd-and-even-aux arbol))
 
-(define arbol-ejemplo '(14 (7 () (12 () ())) (26 (20 (17 () ()) ()) (31 () ()))))
+(define count-odd-and-even
+  (lambda (arbol)
+    (define count-odd-and-even-aux
+      (lambda (subarbol)
+        (cond
+          ((null? subarbol) '(0 0))
+          ((pair? subarbol)
+           (let* ((nodo (car subarbol))
+                  (subarbol-izq (cadr subarbol))
+                  (subarbol-der (caddr subarbol))
+                  (conteo-izq (count-odd-and-even-aux subarbol-izq))
+                  (conteo-der (count-odd-and-even-aux subarbol-der))
+                  (conteo-izq-par (car conteo-izq))
+                  (conteo-izq-impar (cadr conteo-izq))
+                  (conteo-der-par (car conteo-der))
+                  (conteo-der-impar (cadr conteo-der)))
+             (if (even? nodo)
+                 (list (+ 1 conteo-izq-par conteo-der-par) (+ conteo-izq-impar conteo-der-impar))
+                 (list (+ conteo-izq-par conteo-der-par) (+ 1 conteo-izq-impar conteo-der-impar)))))
+          ((number? subarbol)
+           (if (even? subarbol)
+               '(1 0)
+               '(0 1)))
+          (else '(0 0)))))
+    (count-odd-and-even-aux arbol)))
 
 
+(define arbol-vacio '()) ; retorna (0 0)
+(define arbol-un-nodo '(5 () ())) ; retorna (0 1)
+(define arbol-mediano '(10 (5 () ()) (15 () (20 () ())))) ; retorna (2 2)
+(define arbol-grande '(7 (3 () (9 () ())) (15 () (12 () (20 () ())))))  ; retorna (2 4)
+(define arbol-mas-grande '(50 (30 (20 () ()) (40 () ())) (70 () (90 () (100 () ()))))) ; retorna (7 0)
+(define arbol-ejemplo '(14 (7 () (12 () ())) (26 (20 (17 () ()) ()) (31 () ())))) ; retorna (4 3)
+
+(count-odd-and-even arbol-vacio)
+(count-odd-and-even arbol-un-nodo)
+(count-odd-and-even arbol-mediano)
+(count-odd-and-even arbol-grande)
+(count-odd-and-even arbol-mas-grande)
 (count-odd-and-even arbol-ejemplo)
 
 #|18.
@@ -228,24 +254,41 @@ filas anteriores del triangulo para calcular el valor de cada elemento especific
 |#
 
 
-(define (pascal N)
-  (define (calculate-element row col)
-    (cond
-      ((or (= col 0) (= col row)) 1)
-      (else (+ (calculate-element (- row 1) (- col 1))
-               (calculate-element (- row 1) col)))))
+(define pascal
+  (lambda (N)
+    (define calculate-element
+      (lambda (row col)
+        (cond
+          ((or (= col 0) (= col row)) 1)
+          (else (+ (calculate-element (- row 1) (- col 1))
+                   (calculate-element (- row 1) col))))))
   
-  (define (construct-row row)
-    (define (construct-row-aux col)
-      (if (= col row)
-          (list (calculate-element row col))
-          (cons (calculate-element row col) (construct-row-aux (+ col 1)))))
-    (construct-row-aux 0))
+    (define construct-row
+      (lambda (row)
+        (define construct-row-aux
+          (lambda (col)
+            (if (= col row)
+                (list (calculate-element row col))
+                (cons (calculate-element row col) (construct-row-aux (+ col 1))))))
+        (construct-row-aux 0)))
   
-  (if (< N 1)
-      '()
-      (construct-row (- N 1))))
+    (if (< N 1)
+        '()
+        (construct-row (- N 1)))))
 
+; Pruebas
+(pascal -1) ; retorna ()
+(pascal 0) ; retorna ()
+(pascal 1) ; retorna (1)
+(pascal 2) ; retorna (1 1)
+(pascal 3) ; retorna (1 2 1)
+(pascal 4) ; retorna (1 3 3 1)
+(pascal 5) ; retorna (1 4 6 4 1)
+(pascal 6) ; retorna (1 5 10 10 5 1)
+(pascal 7) ; retorna (1 6 15 20 15 6 1)
+(pascal 8) ; retorna (1 7 21 35 35 21 7 1)
+(pascal 9) ; retorna (1 8 28 56 70 56 28 8 1)
+(pascal 10) ; retorna (1 9 36 84 126 126 84 36 9 1)
 
 
 
