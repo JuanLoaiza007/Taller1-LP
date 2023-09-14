@@ -27,7 +27,11 @@ una lista vacía.
 |#
 
 ; Casos prueba del enunciado
-; Ni idea de como formular esto aún (en Desarrollo...)
+(define unArbol '(14
+                  (7 () (12 () ()) )
+                  (26  (20 (17 () ()) ())  (31 () ()) )
+                 )
+)
 
 #| Teoria (en Desarrollo...)
 ; T1: Generamos todos los caminos posibles y su resultado con un #f y #t, luego rescatamos el camino correcto #t
@@ -41,12 +45,6 @@ una lista vacía.
 
           Fuente: https://es.wikipedia.org/wiki/%C3%81rbol_binario_de_b%C3%BAsqueda
 |#
-
-(define unArbol '(14
-                  (7 () (12 () ()) )
-                  (26  (20 (17 () ()) ())  (31 () ()) )
-                 )
-)
 
 #|
 (define valor-nodo
@@ -130,6 +128,18 @@ una lista vacía.
             )
         )
       )
+
+    (define cons-end
+      (lambda (lista elemento)
+        (cond
+          ((null? lista) elemento)       
+          (else (cons (car lista)      
+                      (cons-end (cdr lista) elemento)
+                      )
+                )
+          )
+        )
+      )
     
     (define path-aux
       (lambda (numero arbol camino)
@@ -138,41 +148,18 @@ una lista vacía.
          ((null? arbol) 'nosta)
          ((= numero (valor-nodo arbol)) camino) 
          ((< numero (valor-nodo arbol))
-          (path-aux numero (cadr arbol) (list camino 'left)))
+          (path-aux numero (cadr arbol) (cons-end camino '(left))))
          ((> numero (car arbol))
-          (path-aux numero (caddr arbol) (list camino 'right)))
+          (path-aux numero (caddr arbol) (cons-end camino '(right))))
          )
         
        )
       )
     
-    (reparar (path-aux n BST '()))
-    )
-  )
-
-(define reparar
-  (lambda (lcaotica)
-
-    (define rescatar-ultimo
-      (lambda (lista)
-        (cond
-          ((null? lista) '())
-          ((null? (cdr lista)) (car lista))
-          (else (rescatar-ultimo (cdr lista)))
-          )
-        )
-      )
-
-    (define valido? (or 'left 'right))
-        
-    (if (null? (car lcaotica))
-        (cons (cadr lcaotica) empty)
-        (cons (rescatar-ultimo lcaotica) (reparar (car lcaotica))))
+    (path-aux n BST '())
     )
   )
 
 (define lista (path 17 unArbol))
 (define lista1 '(right (left #f) (right #f)))
 (define lista0 '(a (b (#f) (#f)) (c (#f) (#f))))
-
-
