@@ -278,7 +278,7 @@
       (lambda (numero arbol camino)
         
         (cond
-          ((null? arbol) 'nosta)
+          ((null? arbol) '#f)
           ((= numero (valor-nodo arbol)) camino) 
           ((< numero (valor-nodo arbol))
            (path-aux numero (cadr arbol) (cons-end camino '(left))))
@@ -304,10 +304,10 @@
                   (17 () ())         ;;     (9) (12)        
                   (31 () ()))
                  ))
-(path 0 mybst0) ; Resultado esperado: nosta
-(path 1 mybst0) ; Resultado esperado: nosta
-(path 0 mybst1) ; Resultado esperado: nosta
-(path 1 mybst1) ; Resultado esperado: nosta
+(path 0 mybst0) ; Resultado esperado: #f
+(path 1 mybst0) ; Resultado esperado: #f
+(path 0 mybst1) ; Resultado esperado: #f
+(path 1 mybst1) ; Resultado esperado: #f
 (path 7 mybst1) ; Resultado esperado: (left)
 (path 4 mybst1) ; Resultado esperado: (left left)
 (path 17 mybst1) ; Resultado esperado: (right left) 
