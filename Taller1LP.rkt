@@ -60,7 +60,7 @@
 
 
 
-;;|6
+;;|7
 ;; cartesian-product:
 ;; Proposito:
 ;; L1 x L2 -> L1' x L2' : Procedimiento que hace producto cartesiano
@@ -111,3 +111,29 @@
       ((null? L) '())
       ((list? (car L)) (up-aux (up (car L)) (up (cdr L))))
       (else (cons (car L) (up (cdr L)))))))
+
+
+;;|13
+;; (operate lrators lrands):
+;; Proposito:
+;; L -> L' : Procedimiento que hace producto cartesiano
+;; entre los datos de dos listas.
+;;
+;;<lista> := ()
+;; := (<valor-de-scheme> <lista>)
+
+;;  (operate (list + * + - *) '(1 2 8 4 11 6))
+
+(define (operate lrators lrands)
+  (letrec ((apply-operation
+            (lambda (operators operands)
+              (cond
+                ((null? operators) (car operands))
+                (else (apply-operation (cdr operators)
+                                       (cons ((car operators) (car operands) (cadr operands))
+                                             (cddr operands))))))))
+    (apply-operation lrators lrands)))
+
+  
+  
+
