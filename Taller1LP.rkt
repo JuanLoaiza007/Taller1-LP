@@ -77,14 +77,10 @@ Proposito:
 (L) --> Int: Procedimiento que recibe una lista de números L=(a1, a2, ..., an),
 esta realiza el conteo de las veces que un número ai > aj, siempre que i < j
 (es decir que haya un número mayor a otro que esta ubicado antes del segundo
-número en la lista)
+número en la lista), esto lo realiza con ayuda de las funciones auxiliares
+count y count-greater.
 
 --Funciones auxiliares:
-count-inversions
-Propósito:
-(L) --> Int: Procedimiento que calcula el número de inversiones en la lista L.
-En esta se realiza el llamado a la función count, que toma la lista L y un acumulador.
-
 count
 Proposito:
 (L, accumulator) --> Int: Procedimiento que toma la lista L y el acumulador de inversiones,
@@ -101,26 +97,28 @@ y cada que x es mayor agraga 1 al acumulador.
 <lista-numeros> := ()
 <lista-numeros> := (<int> <lista-numeros>)
 |#
-
-(define (inversions L)
-  (define (count-inversions L)
-    (define (count L accumulator)
-      (cond
-        ((null? L) accumulator)
-        (else
-         (let ((current (car L)))
+(define inversions
+  (lambda (L)
+    (define count
+      (lambda (L accumulator)
+        (cond
+          ((null? L) accumulator)
+          (else
+           (let ((current (car L)))
            (count (cdr L)
-                  (+ accumulator (count-greater current (cdr L))))))))
-    (count L 0))
+           (+ accumulator (count-greater current (cdr L)))))))))
+  
+    (define count-greater
+      (lambda (x L)
+        (cond
+          ((null? L) 0)
+          ((> x (car L)) (+ 1 (count-greater x (cdr L))))
+          (else (count-greater x (cdr L))))))
+    (count L 0)
+  )
+)
 
-  (define (count-greater x L)
-    (cond
-      ((null? L) 0)
-      ((> x (car L)) (+ 1 (count-greater x (cdr L))))
-      (else (count-greater x (cdr L)))))
-
-  (count-inversions L))
-
+(inversions '()) ; retorna 0
 (inversions '(1)) ; retorna 0
 (inversions '(2 3 8 6 1)) ; retorna 5
 (inversions '(1 2 3 4))  ; retorna 0
