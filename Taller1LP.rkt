@@ -178,6 +178,9 @@ y se retorna el número de nodos pares e iompares en una lista.
 <arbol-binario> := (arbol-vacıo) empty
                 := (nodo) <int> <arbol-binario> <arbol-binario>
 
+<lista-par-de-numeros> := ()
+<lista-par-de-numeros> := (<int> <int>)
+
 |#
 
 (define count-odd-and-even
