@@ -25,8 +25,13 @@
 ;; L -> L' : Procedimiento que invierte los pares
 ;; de una lista L.
 ;;
-;;<lista> := ()
-;; := (<valor-de-scheme> <lista>)
+;;<lista-de-pares> ::= ()
+;;                 ::= (<par> <lista-de-pares>)
+;;
+;;<par> ::= (<elemento> <elemento>)
+;;
+;;<elemento> ::= <entero>
+;;           ::= <cadena>
 
 
 
