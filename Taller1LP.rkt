@@ -17,7 +17,7 @@
 ;; DESARROLLO
 
 ;; 2.
-;; down :
+;; down
 ;; Proposito:
 ;; (L) -> L' : Funcion que recibe un argumento:
 ;; Recibe una lista L y devuelve una nueva lista L', 
@@ -25,15 +25,17 @@
 ;; comparado con su versión original en L.
 ;; 
 ;; <lista> := ()
-;; <lista> := (<valor-de-scheme> <lista>)
+;; <lista> := (<elemento> <lista>)
+;; 
+;; <elemento> := <valor>
 
 (define down
-  (lambda (l)
-    (if (null? l)
-        (list l)
-        (if (null? (cdr l))
-            (list l)
-            (cons (list (car l)) (down (cdr l)))
+  (lambda (L)
+    (if (null? L)
+        (list L)
+        (if (null? (cdr L))
+            (list L)
+            (cons (list (car L)) (down (cdr L)))
             )
         )
     )
@@ -53,13 +55,22 @@
 ;; 5.
 ;; list-index
 ;; Proposito:
-;; (P, L) -> Resultado: Función que recibe dos argumentos: 
-;; Un predicado P y una lista L, la función retorna (desde una posición inicial 0) 
-;; el primer elemento de la lista que cumple con el predicado P.
-;; Si no encuentra ningún elemento que cumpla retorna #f.
-;; 
+;; (P L) -> n : La función list-index recibe dos argumentos: un predicado P y una lista L. 
+;; La función busca el primer elemento en la lista L que satisface el predicado P 
+;; y retorna su posición n (desde una posición inicial de 0).
+;; Si no se encuentra ningún elemento que satisfaga el predicado, la función retorna #f.
+;;
+;; list-index-auxiliar
+;; Proposito:
+;; (indice predicado lista) -> n : La función list-index-auxiliar es una función auxiliar utilizada por la función principal list-index.
+;; Recibe tres argumentos: un índice i, un predicado p y una lista l. La función busca el primer elemento en la lista l
+;; que satisface el predicado p y retorna su posición (índice) n. Si no se encuentra ningún elemento que satisfaga el predicado,
+;; la función retorna #f.
+;;
 ;; <lista> := ()
-;; <lista> := (<valor-de-scheme> <lista>)
+;; <lista> := (<elemento> <lista>) 
+;;
+;; <elemento> := <valor>
 
 (define list-index
   (lambda (P L)
@@ -99,9 +110,35 @@
 
 ;; 8.
 ;; mapping
-;; Proposito:
-;; ...
-;; Advertencia de listas no vacias y de igual tamaño
+;; Propósito:
+;; (F L1 L2) -> L' : La función mapping recibe tres argumentos: una función unaria F y dos listas del mismo tamaño 
+;; no vacias L1 y L2 que tienen numeros.
+;; El propósito de esta función es retornar una lista de pares (a, b) donde 'a' es un elemento de L1 y 'b' es un elemento de L2
+;; cumpliendo la propiedad de que al aplicar la función unaria F con el argumento 'a' se obtiene el número 'b'. 
+;; Sigue la regla de que se debe cumplir que F(a) = b.
+;; Advertencia: Las listas deben ser no vacias y de igual tamaño.
+
+;; mapping-aux
+;; Propósito:
+;; (f l1 l2) -> L'' : La función mapping-aux es una función auxiliar utilizada por la función principal mapping.
+;; Recibe tres argumentos: una función unaria f y dos listas de números l1 y l2. Su propósito es construir una lista de pares (a, b)
+;; donde 'a' es un elemento de l1 y 'b' es un elemento de l2 siempre y cuando se cumpla la propiedad de que al aplicar la función unaria 'f'
+;; con el argumento 'a' se obtenga el número 'b' y cuando no se cumple la propiedad crea un par vacio.
+;; La lista resultante se denota como L''.
+;;
+;; mapping-empty-pair-clear
+;; Propósito:
+;; (lista-de-pares) -> L''' : La función mapping-empty-pair-clear es una función auxiliar utilizada por la función principal mapping.
+;; Recibe una lista de pares (a, b) donde hay tambien pares vacíos  y su propósito es eliminar los pares vacíos de la lista, denotada como L'''.
+;;
+;; <lista> := ()
+;; <lista> := (<elemento> <lista>)
+;;
+;; <lista-de-pares> := ()
+;; <lista-de-pares> := (<elemento> <elemento>)
+;;
+;; <elemento> := empty
+;;            := <int>
 
 (define mapping
   (lambda (F L1 L2)
@@ -148,8 +185,13 @@
 
 ;; 11.
 ;; zip
-;; Proposito:
-;; ...
+;; Propósito:
+;; (F L1 L2) -> L' : La función zip recibe tres parámetros: una función binaria F y dos listas L1 y L2 ambas de igual tamaño.
+;; Su propósito es retornar una lista L' donde la posición n-ésima corresponde al resultado de aplicar la función F sobre los elementos
+;; en la posición n-ésima en L1 y L2.
+;;
+;; <lista-numeros> := ()
+;;                 := (<int> <lista-numeros>)
 
 (define zip
   (lambda (F L1 L2)
@@ -174,8 +216,39 @@
 
 ;; 14.
 ;; path
-;; Proposito:
-;; ...
+;; Propósito:
+;; (n BST) -> lista : La función path recibe dos argumentos: un número n y un árbol binario de búsqueda (BST)
+;; representado como una lista de listas. El propósito de esta función es retornar una lista que representa la ruta desde el nodo raíz
+;; del árbol hasta el número n indicada por las cadenas 'left' y 'right'. 
+;; Si el número n se encuentra en el nodo raíz la función retorna una lista vacía.
+;;
+;; valor-nodo
+;; Propósito:
+;; (arbol) -> valor : La función valor-nodo es una función auxiliar utilizada para obtener el valor almacenado en el nodo raíz
+;; del árbol 'arbol'.
+;;
+;; cons-end
+;; Propósito:
+;; (lista elemento) -> lista' : La función cons-end es una función auxiliar utilizada para agregar un elemento al final de la lista 
+;; generando una nueva lista'.
+;;
+;; path-auxiliar
+;; Propósito:
+;; (numero arbol camino) -> lista : La función path-auxiliar es una función auxiliar utilizada por la función principal path.
+;; Recibe tres argumentos: un número 'numero', un árbol 'arbol' y una lista 'camino'. Su propósito es buscar el número 'numero'
+;; en el árbol 'arbol' y construir la lista 'camino' que representa la ruta desde el nodo raíz hasta el número 'numero' que se esta
+;; buscando.
+;; El camino se indica mediante las cadenas 'left' y 'right'.
+;;
+;; <arbol-binario> := (arbol-vacio) empty
+;;                 := (nodo) <int> <arbol-binario> <arbol-binario>
+;;
+;; <camino> := (camino-vacio) empty
+;;          := (lista-camino) <direccion> 
+;;
+;; <direccion> := () 
+;;             := ('left) 
+;;             := ('right)
 
 (define path 
   (lambda (n BST)
@@ -220,34 +293,70 @@
     )
   )
 
-;; Pruebas (ALERTA XD)
+;; Pruebas
+(define mybst0 '()) ;;
+(define mybst1 '(15                  ;;         (15)
+                 (7                  ;;      /        \
+                  (4 () ())          ;;    (7)       (25)
+                  (10 (9 () ())      ;;    / \        / \  
+                      (12 () ())))   ;;  (4) (10)   (17)(31)
+                 (25                 ;;       / \        
+                  (17 () ())         ;;     (9) (12)        
+                  (31 () ()))
+                 ))
+(path 0 mybst0) ; Resultado esperado: nosta
+(path 1 mybst0) ; Resultado esperado: nosta
+(path 0 mybst1) ; Resultado esperado: nosta
+(path 1 mybst1) ; Resultado esperado: nosta
+(path 7 mybst1) ; Resultado esperado: (left)
+(path 4 mybst1) ; Resultado esperado: (left left)
+(path 17 mybst1) ; Resultado esperado: (right left) 
+(path 9 mybst1) ; Resultado esperado: (left right left)
+(path 12 mybst1) ; Resultado esperado: (left right right)
 ;; Pruebas del enunciado
-  (path 17 '(14 (7 () (12 () ()))
-  (26 (20 (17 () ())
-          ())
-      (31 () ())))) ; Resultado esperado: (right left left)
+(path 17 '(14 (7 () (12 () ()))
+              (26 (20 (17 () ())
+                      ())
+                  (31 () ())))) ; Resultado esperado: (right left left)
 
 
 ;; 17.
 ;; prod-scalar-matriz
-;; Proposito:
-;; ...
+;; Propósito:
+;; (mat vec) -> lista : La función prod-scalar-matriz recibe dos argumentos: una matriz 'mat'
+;; representada como una lista de listas y un vector 'vec' representado como una lista,
+;; la longitud de las filas de mat' debe ser igual a la longitud del vector. 
+;; El propósito de esta función es realizar la multiplicación de la matriz 'mat' por el vector 'vec'
+;; y retornar el resultado como una lista.
+;;
+;; prod-vec
+;; Propósito:
+;; (vector1 vector2) -> lista : La función prod-vec es una función auxiliar utilizada 
+;; por la función principal prod-scalar-matriz. 
+;; Recibe dos vectores 'vector1' y 'vector2' representados como listas y tiene como 
+;; propósito multiplicar elemento por elemento ambos vectores y retornar el resultado como una lista.
+;;
+;; <matriz> := ()                   
+;;          := (<vector> <matriz>) 
+;;
+;; <vector> := ()                  
+;;          := (<int> <vector>)  
 
 (define prod-scalar-matriz
   (lambda (mat vec)
     
-    (define prodVec
+    (define prod-vec
       (lambda (vector1 vector2)
         (if (null? (cdr vector2))
             (list (* (car vector1) (car vector2)))
-            (cons (* (car vector1) (car vector2)) (prodVec (cdr vector1) (cdr vector2)))
+            (cons (* (car vector1) (car vector2)) (prod-vec (cdr vector1) (cdr vector2)))
             )
         )
       )
 
     (if (null? (cdr mat))
-        (cons (prodVec (car mat) vec) empty)
-        (cons (prodVec (car mat) vec) (prod-scalar-matriz (cdr mat) vec))
+        (cons (prod-vec (car mat) vec) empty)
+        (cons (prod-vec (car mat) vec) (prod-scalar-matriz (cdr mat) vec))
         )
 
     )
