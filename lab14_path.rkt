@@ -30,7 +30,16 @@ una lista vacía.
 ; Ni idea de como formular esto aún (en Desarrollo...)
 
 #| Teoria (en Desarrollo...)
-; Un arbol binario tiene dos ramas y se cumple que valorRamaIzquierda < valorRamaDerecha
+; T1: Generamos todos los caminos posibles y su resultado con un #f y #t, luego rescatamos el camino correcto #t
+; T2: (Correccion) La teoria de un arbol binario de busqueda decia era que el nodo y el valor buscado se comparaban. Entonces:
+       a) Si el valor que estoy buscando es menor al nodo me voy pa la rama izquierda, si no, pa la derecha xD
+          esto es porque
+
+          "el subárbol izquierdo de cualquier nodo (si no está vacío)
+          contiene valores menores que el que contiene dicho nodo, y el subárbol derecho
+          (si no está vacío) contiene valores mayores"
+
+          Fuente: https://es.wikipedia.org/wiki/%C3%81rbol_binario_de_b%C3%BAsqueda
 |#
 
 (define unArbol '(14
@@ -39,48 +48,51 @@ una lista vacía.
                  )
 )
 
+#|
 (define valor-nodo
-      (lambda (tree)
-        (if (null? (car tree))
-            '()
-            (car tree)
+  (lambda (tree)
+    (if (null? (car tree))
+        '()
+        (car tree)
         )
-        )
-      )
+    )
+  )
     
-    (define valor-izquierdo
-      (lambda (tree)
-        (if (null? (cadr tree))
-            '()
-            (car (cadr tree)))
-        )
-      )
+(define valor-izquierdo
+  (lambda (tree)
+    (if (null? (cadr tree))
+        '()
+        (car (cadr tree)))
+    )
+  )
 
-    (define valor-derecho
-      (lambda (tree)
-        (if (null? (caddr tree))
-            '()
-            (car (caddr tree)))
-        )
-      )
-
-
-    (define rama-izquierda
-      (lambda (tree)
-        (car (cdr tree))
-        )
-      )
-
-    (define rama-derecha
-      (lambda (tree)
-        (car (cdr (cdr tree)))
-        )
-      )
+(define valor-derecho
+  (lambda (tree)
+    (if (null? (caddr tree))
+        '()
+        (car (caddr tree)))
+    )
+  )
 
 
+(define rama-izquierda
+  (lambda (tree)
+    (car (cdr tree))
+    )
+  )
 
+(define rama-derecha
+  (lambda (tree)
+    (car (cdr (cdr tree)))
+    )
+  )
+|#
+
+
+#|
 ; AVISO DE INCOMPLETA
-; Obtiene TODOS los caminos y su resultado con mucho ruido visual
+; T1: Obtiene TODOS los caminos y su resultado con mucho ruido visual
+; Falta rescatar el camino correcto
 (define path
   (lambda (n BST)
     
@@ -104,7 +116,60 @@ una lista vacía.
             (cons 'left (path n (rama-izquierda BST)))
             (cons 'right (path n (rama-derecha BST)))))))
 
+    ) |#
+
+; T2: Piola 👍
+(define path 
+  (lambda (n BST)
+
+    (define valor-nodo
+      (lambda (tree)
+        (if (null? (car tree))
+            '()
+            (car tree)
+            )
+        )
+      )
+    
+    (define path-aux
+      (lambda (numero arbol camino)
+        
+       (cond
+         ((null? arbol) 'nosta)
+         ((= numero (valor-nodo arbol)) camino) 
+         ((< numero (valor-nodo arbol))
+          (path-aux numero (cadr arbol) (list camino 'left)))
+         ((> numero (car arbol))
+          (path-aux numero (caddr arbol) (list camino 'right)))
+         )
+        
+       )
+      )
+    
+    (reparar (path-aux n BST '()))
     )
+  )
+
+(define reparar
+  (lambda (lcaotica)
+
+    (define rescatar-ultimo
+      (lambda (lista)
+        (cond
+          ((null? lista) '())
+          ((null? (cdr lista)) (car lista))
+          (else (rescatar-ultimo (cdr lista)))
+          )
+        )
+      )
+
+    (define valido? (or 'left 'right))
+        
+    (if (null? (car lcaotica))
+        (cons (cadr lcaotica) empty)
+        (cons (rescatar-ultimo lcaotica) (reparar (car lcaotica))))
+    )
+  )
 
 (define lista (path 17 unArbol))
 (define lista1 '(right (left #f) (right #f)))
