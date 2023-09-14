@@ -134,6 +134,38 @@
                                              (cddr operands))))))))
     (apply-operation lrators lrands)))
 
+
+;;|16
+;; (Operar-binarias):
+;; Proposito:
+;; L -> L' : Procedimiento que hace producto cartesiano
+;; entre los datos de dos listas.
+;;
+;;<lista> := ()
+;; := (<valor-de-scheme> <lista>)
+
+;;   (Operar-binarias 4)
+;;(Operar-binarias '(2 suma 9) )
+;;(Operar-binarias '(2 resta 9) )
+;; (Operar-binarias '(2 multiplica 9) )
+;; (Operar-binarias '( (2 multiplica 3) suma (5 resta 1 ) ) )
+;; (Operar-binarias '( (2 multiplica (4 suma 1) ) multiplica( (2 multiplica 4) resta 1 ) ) )
+
+(define Operar-binarias
+  (lambda (operaciones)
+  (cond
+    ((number? operaciones) operaciones) 
+    ((list? operaciones)
+     (let ((op (cadr operaciones))
+           (arg1 (Operar-binarias (car operaciones)))
+           (arg2 (Operar-binarias (caddr operaciones))))
+       (cond
+         ((eq? op 'suma) (+ arg1 arg2))
+         ((eq? op 'resta) (- arg1 arg2))
+         ((eq? op 'multiplica) (* arg1 arg2))))))))
+         
+
+
   
   
 
