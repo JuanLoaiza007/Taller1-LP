@@ -94,7 +94,6 @@ Proposito:
 lista L en la que se realiza la busqueda, esta función compara x con cada elemento de L,
 y cada que x es mayor agraga 1 al acumulador.
 
-<lista-numeros> := ()
 <lista-numeros> := (<int> <lista-numeros>)
 |#
 (define inversions
@@ -134,16 +133,25 @@ filter, luego esto lo retorna acumulandolo en acum, que actua como un valor inic
 
 --Funciones auxiliares
 iterator
-(i, accumulator) --> : Procedimiento auxiliar que realiza la iteración y el calculo
+(i, accumulator) --> Int: Procedimiento auxiliar que realiza la iteración y el calculo
 acumulativo en el rango de 'a' a 'b', aplicando 'filter' a cada elemento del rango
 y a los que pasen filtro aplicarles 'F' ademas de acumular este resultado y retornarlo
 al final.
+
+<a> := <int>
+<b> := <int>
+<F> := <funcion-binaria>
+<acum> := <int>
+<filter> := <funcion-unitaria>
+<i> := <int>
+<accumulator> := <int>
+
 |#
 
 (define filter-acum
   (lambda (a b F acum filter)
     (define iterator
-      (lambda (i accumulator) ; Agrega paréntesis aquí
+      (lambda (i accumulator)
         (cond
           ((> i b) accumulator)
           ((filter i)
@@ -178,8 +186,8 @@ y se retorna el número de nodos pares e iompares en una lista.
 <arbol-binario> := (arbol-vacıo) empty
                 := (nodo) <int> <arbol-binario> <arbol-binario>
 
-<lista-par-de-numeros> := ()
-<lista-par-de-numeros> := (<int> <int>)
+<lista-par-de-numeros> := ()    (cuando no encuentra nodos)
+<lista-par-de-numeros> := (<int> <int>)    (cuando si encuentra nodos)
 
 |#
 
@@ -250,8 +258,8 @@ de Pascal, para esto verifica si el elemento esta en los extremos del triangulo 
 el valor es 1), o en la parte interna, para este caso suma los valores de los elementos en las
 filas anteriores del triangulo para calcular el valor de cada elemento especifico.
 
-<lista-numeros> := ()
-<lista-numeros> := (<int> <lista-numeros>)
+<lista-numeros> := () (cuando se ingresa un N que no existe en el triangulo de Pascal)
+<lista-numeros> := (<int> <lista-numeros>) (cuando se ingresa un N que si existe en el triangulo de Pascal)
 |#
 
 
